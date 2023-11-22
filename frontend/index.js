@@ -4,7 +4,17 @@ function moduleProject3() {
 
   function buildNav(links) {
     //  ✨ do your magic here
-    return document.createElement('nav')
+
+    const container = document.createElement('nav')
+    links.forEach(link => {
+      let a = document.createElement('a');
+      a.href = link.href;
+      a.textContent = link.textContent;
+      a.title = link.title;
+      container.appendChild(a)
+    })
+
+    return container
   }
 
   // ❗ DOM creation using your `buildNav` component (do not change):
@@ -20,6 +30,33 @@ function moduleProject3() {
 
   function buildLearnerCard(learner, languages) {
     //  ✨ do your magic here
+      const card = document.createElement('div');
+      card.classList.add('learner-card');
+
+      const nameP = document.createElement('p');
+      nameP.textContent = learner.fullName;
+
+      const learnerID = document.createElement('p');
+      learnerID.textContent = `Learner ID: ${learner.id}`;
+
+      const dateOfBirthP = document.createElement('p');
+      dateOfBirthP.textContent = `Date of Birth: ${learner.dateOfBirth}`;
+
+      const favLanguageP = document.createElement('p');
+      const favLanguage = languages.find(lang => lang.id === learner.favLanguage);
+      favLanguageP.textContent = `Favorite Language: ${favLanguage.name}`;
+
+      [nameP, learnerID, dateOfBirthP, favLanguageP].forEach(p =>{
+        card.appendChild(p);
+      })
+
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.learner-card').forEach(card =>{
+          card.classList.remove('active');
+        })
+        card.classList.add('active');
+      })
+      return card
   }
 
   {
@@ -39,14 +76,56 @@ function moduleProject3() {
       { id: 41, fullName: 'Sabah Beydoun', dateOfBirth: '1988-03-25', favLanguage: 91 },
       { id: 17, fullName: 'Daniel Castillo', dateOfBirth: '1995-11-05', favLanguage: 12 }
     ]
-    //  ✨ do your magic here
+    
+      learners.forEach(learner => {
+        const learnerCard = buildLearnerCard(learner, languages);
+        document.querySelector('section').appendChild(learnerCard);
+      })
   }
 
   // 👉 TASK 3 - Write a `buildFooter` component that returns a footer
 
   function buildFooter(footerData) {
     //  ✨ do your magic here
-    return document.createElement('footer')
+    const footer = document.createElement('footer');
+
+    const companyInfo = document.createElement('div');
+    companyInfo.classList.add('company-info')
+    footer.appendChild(companyInfo)
+
+    const companyName = document.createElement('p');
+    companyName.classList.add('company-name')
+    companyName.textContent = footerData.companyName;
+   
+    const address = document.createElement('p');
+    address.classList.add('address');
+    address.textContent = footerData.address;
+    
+    const contactEmail = document.createElement('p');
+    contactEmail.classList.add('contact-email');
+    contactEmail.innerHTML = 'Email: <a href ="mailto:info@example.com"> info@example.com </a>';
+
+    [companyName, address, contactEmail].forEach(p => {
+      companyInfo.appendChild(p)
+    })
+
+    const socialsDiv = document.createElement('div')
+    socialsDiv.classList.add('social-media');
+    footer.appendChild(socialsDiv);
+
+    for (let sites in footerData.socialMedia){
+      let socialLinks = document.createElement('a')
+      socialLinks.href = footerData.socialMedia[sites]
+      socialLinks.textContent = sites.charAt(0).toUpperCase() + sites.slice(1);
+      socialsDiv.appendChild(socialLinks)
+    }
+
+    let year = new Date().getFullYear();
+    const copyrightInfo = document.createElement('div');
+    copyrightInfo.textContent = `© ${footerData.companyName.toUpperCase()} ${year} `
+    footer.appendChild(copyrightInfo)
+
+    return footer
   }
 
   // ❗ DOM creation using your `buildFooter` component (do not change):
@@ -64,6 +143,13 @@ function moduleProject3() {
   // 👉 TASK 4 - Clicking on the section should deactivate the active card
 
   //  ✨ do your magic here
+
+  document.addEventListener('click', evt => {
+    if (evt.target === document.querySelector('section')){
+      document.querySelectorAll('.learner-card').classList.remove('active')
+    }
+  })
+
 }
 
 // ❗ DO NOT CHANGE THIS CODE
